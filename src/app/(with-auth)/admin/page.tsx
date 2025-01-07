@@ -1,3 +1,3 @@
 export default async function AdminMain() {
-  return <div></div>
+  return <main>I AM ADMIN PAGE</main>
 }
