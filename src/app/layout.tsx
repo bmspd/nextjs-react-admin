@@ -2,9 +2,6 @@ import type { Metadata } from 'next'
 import { Inter, Nunito } from 'next/font/google'
 import './globals.css'
 import clsx from 'clsx'
-import { SessionProvider } from 'next-auth/react'
-import { auth } from '@/auth'
-import { Header } from '@/components/header'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -20,15 +17,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await auth()
   return (
     <html lang="en" className={clsx(inter.variable, nunito.variable)}>
-      <SessionProvider refetchOnWindowFocus={false} session={session}>
-        <body className="min-h-screen min-w-screen">
-          <Header />
-          <div className="p-4">{children}</div>
-        </body>
-      </SessionProvider>
+      <body className="min-h-screen min-w-screen">{children}</body>
     </html>
   )
 }
