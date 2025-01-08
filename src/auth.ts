@@ -6,6 +6,7 @@ export const authConfig = {
   pages: {
     signIn: '/login',
   },
+  trustHost: true,
   providers: [
     Credentials({
       credentials: {
@@ -33,7 +34,7 @@ export const authConfig = {
     async authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
       if (nextUrl.pathname.startsWith('/admin')) {
-        if (!isLoggedIn) return false
+        if (!isLoggedIn || auth?.user?.role !== 'admin') return false
       }
       return true
     },
