@@ -20,7 +20,7 @@
     "lucide-react": "^0.469.0",
     "next": "^15.1.3",
     "next-auth": "^5.0.0-beta.25",
-    "ra-data-json-server": "^5.4.3",
+    "ra-data-json-server": "^5.4.4",
     "react": "^19",
     "react-admin": "^5.4.3",
     "react-dom": "^19",
