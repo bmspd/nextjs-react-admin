@@ -22,7 +22,7 @@
     "next-auth": "^5.0.0-beta.25",
     "ra-data-json-server": "^5.4.4",
     "react": "^19",
-    "react-admin": "^5.4.3",
+    "react-admin": "^5.4.4",
     "react-dom": "^19",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
