@@ -1,3 +1,4 @@
+import { responseWithErrors } from '@/app/api/utils'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ subId: string }> }) {
@@ -15,21 +16,7 @@ export async function PUT(request: NextRequest) {
     },
     body: JSON.stringify(body),
   })
-  const bodyResponse = await response.json()
-  if (!response.ok) {
-    for (const field in bodyResponse) {
-      if (Array.isArray(bodyResponse[field])) bodyResponse[field] = bodyResponse[field].join(' ')
-    }
-    return NextResponse.json(
-      {
-        errors: {
-          ...bodyResponse,
-        },
-      },
-      { status: 400 }
-    )
-  }
-  return NextResponse.json(bodyResponse)
+  return responseWithErrors(response)
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ subId: string }> }) {

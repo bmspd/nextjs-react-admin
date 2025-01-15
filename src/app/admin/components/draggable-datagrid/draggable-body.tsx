@@ -6,13 +6,19 @@ import { useEffect, useState } from 'react'
 import { DatagridBody, DatagridBodyProps, useListContext } from 'react-admin'
 import { flushSync } from 'react-dom'
 import { DraggableDatagridRow } from './draggable-row'
+import { useFirstMountState } from '@/hooks/useFirstMount'
 
-export const DraggableDatagridBody = (props: DatagridBodyProps) => {
+export const DraggableDatagridBody = ({ isReordering, ...props }: DatagridBodyProps & { isReordering: boolean }) => {
   const { data } = useListContext()
   const [localData, setLocalData] = useState<Record<string, unknown>[]>(data ?? [])
+  const isFirstMount = useFirstMountState()
   useEffect(() => {
     setLocalData(data ?? [])
   }, [data])
+  useEffect(() => {
+    if (isFirstMount) return
+    if (!isReordering) setLocalData(data ?? [])
+  }, [isReordering])
   useEffect(() => {
     return monitorForElements({
       canMonitor: ({}) => {
@@ -57,5 +63,5 @@ export const DraggableDatagridBody = (props: DatagridBodyProps) => {
       },
     })
   }, [localData])
-  return <DatagridBody {...props} data={localData} row={<DraggableDatagridRow />} />
+  return <DatagridBody {...props} data={localData} row={<DraggableDatagridRow isReordering={isReordering} />} />
 }

@@ -1,5 +1,6 @@
 'use client'
-import { Admin, Resource, CustomRoutes, Layout, DataProvider } from 'react-admin'
+import { Admin, Resource, CustomRoutes, Layout, DataProvider, memoryStore } from 'react-admin'
+import { QueryClient } from '@tanstack/react-query'
 import jsonServerProvider from 'ra-data-json-server'
 import { CategoriesList } from './categories-list'
 import { Route } from 'react-router-dom'
@@ -20,9 +21,15 @@ const customizedProvider = (baseProvider: DataProvider): DataProvider => ({
 
 //const dataProvider = jsonServerProvider('https://jsonplaceholder.typicode.com')
 const dataProvider = customizedProvider(jsonServerProvider('http://localhost:3000/api/data'))
-
+const queryClient = new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false } } })
 const AdminApp = () => (
-  <Admin dataProvider={dataProvider} layout={({ children }) => <Layout sx={{ marginTop: 0 }}>{children}</Layout>}>
+  <Admin
+    queryClient={queryClient}
+    dataProvider={dataProvider}
+    layout={({ children }) => <Layout sx={{ marginTop: 0 }}>{children}</Layout>}
+    // нет необходимости держать в localStorage
+    store={memoryStore()}
+  >
     <Resource name="categories" list={CategoriesList} create={<div>I AM CREATE</div>} edit={<div>I AM EDIT</div>}>
       <Route path=":categoryId/subs" element={<SubCategoriesList />} />
       <Route path=":categoryId/subs/:subId" element={<SubCategoriesEdit />} />

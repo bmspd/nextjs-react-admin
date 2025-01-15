@@ -19,6 +19,8 @@ import { DraggableDatagrid } from '../draggable-datagrid'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddBoxIcon from '@mui/icons-material/AddBox'
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 const DynamicTitle = () => {
   const { meta } = useListContext()
@@ -77,8 +79,52 @@ export const CustomDeleteButton = ({
   )
 }
 
+const ReorderingControls = ({
+  isReordering,
+  setReordering,
+}: {
+  isReordering: boolean
+  setReordering: Dispatch<SetStateAction<boolean>>
+}) => {
+  const { categoryId } = useParams()
+  if (!isReordering)
+    return (
+      <Button
+        label="Изменить порядок"
+        startIcon={<DragIndicatorIcon />}
+        onClick={() => {
+          setReordering(true)
+        }}
+      />
+    )
+  return (
+    <>
+      <Button
+        label="Сохранить"
+        onClick={() => {
+          // TODO: сделать shared state, чтобы сюда пихнуть localdata с нужным порядком
+          fetch(`/api/data/categories/${categoryId}/update-subcategories-order`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ privet: 'test' }),
+          })
+        }}
+      />
+      <Button
+        label="Отменить"
+        onClick={() => {
+          setReordering(false)
+        }}
+      />
+    </>
+  )
+}
+
 export const SubCategoriesList = () => {
   const { categoryId } = useParams()
+  const [isReordering, setReordering] = useState<boolean>(false)
   return (
     <Box sx={{ paddingTop: 2 }}>
       <List
@@ -95,11 +141,12 @@ export const SubCategoriesList = () => {
             <Link to="./create">
               <Button label="Добавить" startIcon={<AddBoxIcon />} />
             </Link>
+            <ReorderingControls isReordering={isReordering} setReordering={setReordering} />
             <ExportButton />
           </TopToolbar>
         }
       >
-        <DraggableDatagrid bulkActionButtons={false} isRowSelectable={() => false}>
+        <DraggableDatagrid bulkActionButtons={false} isRowSelectable={() => false} isReordering={isReordering}>
           <TextField source="id" sortable={false} />
           <TextField source="name" sortable={false} />
           <ActionsField />

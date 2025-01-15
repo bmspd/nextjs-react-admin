@@ -11,7 +11,13 @@ import { DropIndicator } from '@atlaskit/pragmatic-drag-and-drop-react-drop-indi
 import { Checkbox, TableCell, TableRow } from '@mui/material'
 import { createPortal } from 'react-dom'
 
-export const DraggableDatagridRow = ({ onToggleItem, children, selected, selectable }: DatagridRowProps) => {
+export const DraggableDatagridRow = ({
+  onToggleItem,
+  children,
+  selected,
+  selectable,
+  isReordering,
+}: DatagridRowProps & { isReordering: boolean }) => {
   const record = useRecordContext()
   const ref = useRef<HTMLTableRowElement>(null)
   const [state, setState] = useState<RowState>({ type: 'idle' })
@@ -24,6 +30,9 @@ export const DraggableDatagridRow = ({ onToggleItem, children, selected, selecta
         element,
         getInitialData() {
           return { id: record!.id }
+        },
+        canDrag() {
+          return isReordering
         },
         onGenerateDragPreview({ nativeSetDragImage }) {
           setCustomNativeDragPreview({
@@ -83,7 +92,7 @@ export const DraggableDatagridRow = ({ onToggleItem, children, selected, selecta
         },
       })
     )
-  }, [record])
+  }, [record, isReordering])
   return record ? (
     <>
       <TableRow ref={ref} sx={{ cursor: 'pointer', position: 'relative', zIndex: 2 }} data-id={record?.id}>
