@@ -1,12 +1,14 @@
 'use client'
-import { Admin, Resource, CustomRoutes, Layout, DataProvider, memoryStore } from 'react-admin'
+import { Admin, Resource, CustomRoutes, Layout, DataProvider } from 'react-admin'
 import { QueryClient } from '@tanstack/react-query'
 import jsonServerProvider from 'ra-data-json-server'
-import { CategoriesList } from './categories-list'
+import { CategoriesList } from './categories/categories-list'
 import { Route } from 'react-router-dom'
 import { SubCategoriesList } from './subcategories/sub-list'
 import { SubCategoriesEdit } from './subcategories/sub-edit'
 import { SubCategoriesCreate } from './subcategories/sub-create'
+import { CategoriesCreate } from './categories/categories-create'
+import { CategoriesEdit } from './categories/categories-edit'
 
 // TODO: написать свой кастомный провайдер
 const customizedProvider = (baseProvider: DataProvider): DataProvider => ({
@@ -19,7 +21,6 @@ const customizedProvider = (baseProvider: DataProvider): DataProvider => ({
   },
 })
 
-//const dataProvider = jsonServerProvider('https://jsonplaceholder.typicode.com')
 const dataProvider = customizedProvider(jsonServerProvider('http://localhost:3000/api/data'))
 const queryClient = new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false } } })
 const AdminApp = () => (
@@ -27,10 +28,10 @@ const AdminApp = () => (
     queryClient={queryClient}
     dataProvider={dataProvider}
     layout={({ children }) => <Layout sx={{ marginTop: 0 }}>{children}</Layout>}
-    // нет необходимости держать в localStorage
-    store={memoryStore()}
+    // лучше наверное сохранять это в локал стору
+    //store={memoryStore()}
   >
-    <Resource name="categories" list={CategoriesList} create={<div>I AM CREATE</div>} edit={<div>I AM EDIT</div>}>
+    <Resource name="categories" list={CategoriesList} create={CategoriesCreate} edit={CategoriesEdit}>
       <Route path=":categoryId/subs" element={<SubCategoriesList />} />
       <Route path=":categoryId/subs/:subId" element={<SubCategoriesEdit />} />
       <Route path=":categoryId/subs/create" element={<SubCategoriesCreate />} />
@@ -38,8 +39,6 @@ const AdminApp = () => (
     <CustomRoutes>
       <Route path="/settings" element={<div>TEST</div>} />
     </CustomRoutes>
-    {/* <Resource name="posts" list={ListGuesser} edit={EditGuesser} recordRepresentation="title" />
-    <Resource name="comments" list={ListGuesser} edit={EditGuesser} /> */}
   </Admin>
 )
 

@@ -2,23 +2,14 @@ import { extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/clo
 import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import { reorderWithEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/reorder-with-edge'
 import { triggerPostMoveFlash } from '@atlaskit/pragmatic-drag-and-drop-flourish/trigger-post-move-flash'
-import { useEffect, useState } from 'react'
-import { DatagridBody, DatagridBodyProps, useListContext } from 'react-admin'
+import { useEffect } from 'react'
+import { DatagridBody, DatagridBodyProps } from 'react-admin'
 import { flushSync } from 'react-dom'
 import { DraggableDatagridRow } from './draggable-row'
-import { useFirstMountState } from '@/hooks/useFirstMount'
+import { useReorderingContext } from '../reordering-context/reordering-context'
 
-export const DraggableDatagridBody = ({ isReordering, ...props }: DatagridBodyProps & { isReordering: boolean }) => {
-  const { data } = useListContext()
-  const [localData, setLocalData] = useState<Record<string, unknown>[]>(data ?? [])
-  const isFirstMount = useFirstMountState()
-  useEffect(() => {
-    setLocalData(data ?? [])
-  }, [data])
-  useEffect(() => {
-    if (isFirstMount) return
-    if (!isReordering) setLocalData(data ?? [])
-  }, [isReordering])
+export const DraggableDatagridBody = (props: DatagridBodyProps) => {
+  const { orderingData, setOrderingData } = useReorderingContext()
   useEffect(() => {
     return monitorForElements({
       canMonitor: ({}) => {
@@ -35,8 +26,8 @@ export const DraggableDatagridBody = ({ isReordering, ...props }: DatagridBodyPr
           return
         }
 
-        const indexOfSource = localData.findIndex((ldata) => ldata?.id === sourceData.id)
-        const indexOfTarget = localData.findIndex((ldata) => ldata?.id === targetData.id)
+        const indexOfSource = orderingData.findIndex((odata) => odata?.id === sourceData.id)
+        const indexOfTarget = orderingData.findIndex((odata) => odata?.id === targetData.id)
 
         if (indexOfTarget < 0 || indexOfSource < 0) {
           return
@@ -45,9 +36,9 @@ export const DraggableDatagridBody = ({ isReordering, ...props }: DatagridBodyPr
         const closestEdgeOfTarget = extractClosestEdge(targetData)
 
         flushSync(() => {
-          setLocalData(
+          setOrderingData(
             reorderWithEdge({
-              list: localData,
+              list: orderingData,
               startIndex: indexOfSource,
               indexOfTarget,
               closestEdgeOfTarget,
@@ -62,6 +53,6 @@ export const DraggableDatagridBody = ({ isReordering, ...props }: DatagridBodyPr
         }
       },
     })
-  }, [localData])
-  return <DatagridBody {...props} data={localData} row={<DraggableDatagridRow isReordering={isReordering} />} />
+  }, [orderingData])
+  return <DatagridBody {...props} data={orderingData} row={<DraggableDatagridRow />} />
 }

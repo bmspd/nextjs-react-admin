@@ -10,17 +10,13 @@ import { attachClosestEdge, extractClosestEdge } from '@atlaskit/pragmatic-drag-
 import { DropIndicator } from '@atlaskit/pragmatic-drag-and-drop-react-drop-indicator/box'
 import { Checkbox, TableCell, TableRow } from '@mui/material'
 import { createPortal } from 'react-dom'
+import { useReorderingContext } from '../reordering-context/reordering-context'
 
-export const DraggableDatagridRow = ({
-  onToggleItem,
-  children,
-  selected,
-  selectable,
-  isReordering,
-}: DatagridRowProps & { isReordering: boolean }) => {
+export const DraggableDatagridRow = ({ onToggleItem, children, selected, selectable }: DatagridRowProps) => {
   const record = useRecordContext()
   const ref = useRef<HTMLTableRowElement>(null)
   const [state, setState] = useState<RowState>({ type: 'idle' })
+  const { isReordering } = useReorderingContext()
   useEffect(() => {
     const element = ref.current
     invariant(element)

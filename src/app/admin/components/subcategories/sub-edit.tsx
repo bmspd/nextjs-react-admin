@@ -20,6 +20,7 @@ export const SubCategoriesEdit = () => {
   const transform: TransformData = async (data) => {
     const photo = await formatImageToServer(data.photo)
     let backgroundPhotos
+    // если ни одна из фотографий не поменялась и ничего не добавилось
     if (data.background_photos?.length && data.background_photos.every((photo: { photo?: string }) => photo.photo)) {
       backgroundPhotos = undefined
     } else {
