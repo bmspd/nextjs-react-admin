@@ -1,5 +1,5 @@
 import { Children, isValidElement, useEffect, useRef, useState } from 'react'
-import { DatagridRowProps, FieldProps, useRecordContext } from 'react-admin'
+import { DatagridCell, DatagridRowProps, FieldProps, useRecordContext, useResourceContext } from 'react-admin'
 import invariant from 'tiny-invariant'
 import { RowState } from './@types'
 import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine'
@@ -11,9 +11,11 @@ import { DropIndicator } from '@atlaskit/pragmatic-drag-and-drop-react-drop-indi
 import { Checkbox, TableCell, TableRow } from '@mui/material'
 import { createPortal } from 'react-dom'
 import { useReorderingContext } from '../reordering-context/reordering-context'
+import clsx from 'clsx'
 
-export const DraggableDatagridRow = ({ onToggleItem, children, selected, selectable }: DatagridRowProps) => {
+export const DraggableDatagridRow = ({ onToggleItem, children, selected, selectable, hasBulkActions }: DatagridRowProps) => {
   const record = useRecordContext()
+  const resource = useResourceContext()
   const ref = useRef<HTMLTableRowElement>(null)
   const [state, setState] = useState<RowState>({ type: 'idle' })
   const { isReordering } = useReorderingContext()
@@ -92,9 +94,8 @@ export const DraggableDatagridRow = ({ onToggleItem, children, selected, selecta
   return record ? (
     <>
       <TableRow ref={ref} sx={{ cursor: 'pointer', position: 'relative', zIndex: 2 }} data-id={record?.id}>
-        {selectable && (
+        {hasBulkActions && (
           <TableCell padding="none">
-            (
             <Checkbox
               sx={{ paddingRight: 1, paddingLeft: 2 }}
               checked={selected}
@@ -103,13 +104,19 @@ export const DraggableDatagridRow = ({ onToggleItem, children, selected, selecta
                   onToggleItem(record.id, event)
                 }
               }}
+              disabled={!selectable}
             />
-            )
           </TableCell>
         )}
-        {Children.map(children, (field) =>
+        {Children.map(children, (field, index) =>
           isValidElement<FieldProps>(field) ? (
-            <TableCell key={`${record.id}-${field.props.source}`}>{field}</TableCell>
+            // это я просто взял с гитхаба react-admin https://github.com/marmelab/react-admin/blob/874ebac1ee5f82430925288b71649011409cf9cf/packages/ra-ui-materialui/src/list/datagrid/DatagridRow.tsx#L215
+            <DatagridCell
+              key={`${record.id}-${field.props.source || index}`}
+              className={clsx(`column-${field.props.source}`, 'RaDatagrid-rowCell')}
+              record={record}
+              {...{ field, resource }}
+            />
           ) : null
         )}
         {state.type === 'is-dragging-over' && state.closestEdge ? (

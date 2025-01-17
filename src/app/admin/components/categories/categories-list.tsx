@@ -1,29 +1,40 @@
-import { Button, Datagrid, ExportButton, List, NumberField, TopToolbar } from 'react-admin'
+import { Button, ExportButton, NumberField, TopToolbar } from 'react-admin'
 import { Link } from 'react-router-dom'
 import { LinkField } from '../link-field'
 import AddBoxIcon from '@mui/icons-material/AddBox'
 import { ActionsField } from '../actions-field'
+import { ReorderList } from '../reorder-list'
+import { DraggableDatagrid } from '../draggable-datagrid'
+import { ReorderingControls } from '../reordering-context/reordering-controls'
+
+const CategoriesActions = () => (
+  <TopToolbar>
+    <Link to="./create">
+      <Button label="Добавить" startIcon={<AddBoxIcon />} />
+    </Link>
+    <ReorderingControls
+      onSave={(orderingData) =>
+        fetch('/api/data/categories/update-order/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(orderingData.map((el) => el.id)),
+        })
+      }
+    />
+    <ExportButton />
+  </TopToolbar>
+)
 
 export const CategoriesList = () => {
   return (
-    <List
-      resource="categories"
-      pagination={false}
-      title="Категории"
-      actions={
-        <TopToolbar>
-          <Link to="./create">
-            <Button label="Добавить" startIcon={<AddBoxIcon />} />
-          </Link>
-          <ExportButton />
-        </TopToolbar>
-      }
-    >
-      <Datagrid bulkActionButtons={false} rowClick={false}>
+    <ReorderList resource="categories" title="Категории" actions={<CategoriesActions />} pagination={false}>
+      <DraggableDatagrid bulkActionButtons={false} rowClick={false}>
         <LinkField href={(record) => `./${record.id}/subs`} element={(record) => record.name} label="Название" />
-        <NumberField source="column_number" label="Колонка в меню" />
+        <NumberField source="column_number" label="Колонка в меню" sortable={false} />
         <ActionsField resource="categories" deleteConfirmProps={{ title: 'Удалить категорию' }} />
-      </Datagrid>
-    </List>
+      </DraggableDatagrid>
+    </ReorderList>
   )
 }
