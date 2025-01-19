@@ -9,6 +9,9 @@ import { SubCategoriesEdit } from './subcategories/sub-edit'
 import { SubCategoriesCreate } from './subcategories/sub-create'
 import { CategoriesCreate } from './categories/categories-create'
 import { CategoriesEdit } from './categories/categories-edit'
+import { ItemsList } from './items/items-list'
+import { ItemsCreate } from './items/items-create'
+import { ItemsEdit } from './items/items-edit'
 
 // TODO: написать свой кастомный провайдер
 const customizedProvider = (baseProvider: DataProvider): DataProvider => ({
@@ -35,6 +38,9 @@ const AdminApp = () => (
       <Route path=":categoryId/subs" element={<SubCategoriesList />} />
       <Route path=":categoryId/subs/:subId" element={<SubCategoriesEdit />} />
       <Route path=":categoryId/subs/create" element={<SubCategoriesCreate />} />
+      <Route path=":categoryId/subs/:subId/items" element={<ItemsList />} />
+      <Route path=":categoryId/subs/:subId/items/create" element={<ItemsCreate />} />
+      <Route path=":categoryId/subs/:subId/items/:itemId" element={<ItemsEdit />} />
     </Resource>
     <CustomRoutes>
       <Route path="/settings" element={<div>TEST</div>} />

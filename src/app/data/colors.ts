@@ -1,0 +1,36 @@
+export const ITEM_COLORS: { value: string; label: string }[] = [
+  { value: '#F9FAFA', label: 'Снежный' },
+  { value: '#E6DFCC', label: 'Слоновая кость' },
+  { value: '#C36453', label: 'Терракота' },
+  { value: '#F0EAE8', label: 'Амур' },
+  { value: '#EBE2D4', label: 'Бежево-ванильный' },
+  { value: '#BD6D5D', label: 'Лосось' },
+  { value: '#E5E5E5', label: 'Белая скала' },
+  { value: '#E6A28B', label: 'Персиково-розовый' },
+  { value: '#D67D5C', label: 'Темно-персиковый' },
+  { value: '#DBE3E2', label: 'Лавандовый нежный' },
+  { value: '#EDC47C', label: 'Абрикосовый' },
+  { value: '#DF875C', label: 'Персиковый' },
+  { value: '#64A4B1', label: 'Серовато-бирюзовый' },
+  { value: '#E7B668', label: 'Абрикосовый холодный' },
+  { value: '#DF8F61', label: 'Бледно-медный' },
+  { value: '#609595', label: 'Голубовато-серый' },
+  { value: '#B09F5A', label: 'Верблюжий' },
+  { value: '#99795D', label: 'Мокко' },
+  { value: '#0C9FD9', label: 'Лазурный' },
+  { value: '#809F78', label: 'Серо-зеленый' },
+  { value: '#77624E', label: 'Табачно-коричневый' },
+  { value: '#0474B8', label: 'Небесно-синий' },
+  { value: '#798466', label: 'Зелено-коричневый' },
+  { value: '#6D5E5C', label: 'Угольно-серый' },
+  { value: '#84868C', label: 'Дымчатый' },
+  { value: '#6B8A64', label: 'Глейд грин' },
+  { value: '#5A5357', label: 'Темно-серый' },
+  { value: '#7A7D80', label: 'Гранит' },
+  { value: '#577056', label: 'Орехово-зеленый' },
+  { value: '#374041', label: 'Древесный уголь' },
+]
+export const COLORS_BY_VALUE = ITEM_COLORS.reduce<Record<string, string>>((acc, { value, label }) => {
+  acc[value] = label as string
+  return acc
+}, {})

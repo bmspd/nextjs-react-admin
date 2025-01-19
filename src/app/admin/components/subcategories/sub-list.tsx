@@ -1,4 +1,4 @@
-import { Button, ExportButton, TextField, TopToolbar, useListContext } from 'react-admin'
+import { Button, TextField, TopToolbar, useListContext } from 'react-admin'
 import { Link, useParams } from 'react-router-dom'
 import { DraggableDatagrid } from '../draggable-datagrid'
 import AddBoxIcon from '@mui/icons-material/AddBox'
@@ -6,6 +6,7 @@ import { SubCategoriesBreadCrumbs } from './sub-breadcrumbs'
 import { ReorderingControls } from '../reordering-context/reordering-controls'
 import { ActionsField } from '../actions-field'
 import { ReorderList } from '../reorder-list'
+import { LinkField } from '../link-field'
 
 const DynamicTitle = () => {
   const { meta } = useListContext()
@@ -34,7 +35,6 @@ const SubActions = ({ categoryId }: { categoryId?: string }) => (
         })
       }
     />
-    <ExportButton />
   </TopToolbar>
 )
 
@@ -42,7 +42,7 @@ export const SubCategoriesList = () => {
   const { categoryId } = useParams<{ categoryId: string }>()
   return (
     <ReorderList
-      resource={`categories/${categoryId}/items`}
+      resource={`categories/${categoryId}/subs`}
       title={<DynamicTitle />}
       filters={<SubFilters />}
       actions={<SubActions categoryId={categoryId} />}
@@ -50,7 +50,7 @@ export const SubCategoriesList = () => {
     >
       <DraggableDatagrid bulkActionButtons={false} isRowSelectable={() => false}>
         <TextField source="id" sortable={false} />
-        <TextField source="name" sortable={false} />
+        <LinkField href={(record) => `./${record.id}/items`} element={(record) => record.name} label="Название" />
         <ActionsField resource="subcategories" deleteConfirmProps={{ title: 'Удалить подкатегорию' }} />
       </DraggableDatagrid>
     </ReorderList>

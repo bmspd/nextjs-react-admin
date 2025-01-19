@@ -1,4 +1,4 @@
-import { Button, ExportButton, NumberField, TopToolbar } from 'react-admin'
+import { Button, NumberField, TopToolbar } from 'react-admin'
 import { Link } from 'react-router-dom'
 import { LinkField } from '../link-field'
 import AddBoxIcon from '@mui/icons-material/AddBox'
@@ -23,7 +23,6 @@ const CategoriesActions = () => (
         })
       }
     />
-    <ExportButton />
   </TopToolbar>
 )
 
