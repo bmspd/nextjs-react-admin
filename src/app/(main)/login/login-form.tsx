@@ -26,6 +26,7 @@ export const LoginForm = ({ prevPath }: { prevPath?: string }) => {
         onClick={() => {
           signIn('credentials', { ...values, redirect: false }).then(() => {
             if (prevPath) router.push(prevPath)
+            else router.push('/')
           })
         }}
       >
