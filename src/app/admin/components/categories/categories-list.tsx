@@ -6,6 +6,7 @@ import { ActionsField } from '../actions-field'
 import { ReorderList } from '../reorder-list'
 import { DraggableDatagrid } from '../draggable-datagrid'
 import { ReorderingControls } from '../reordering-context/reordering-controls'
+import { ReorderIndicatorField } from '../draggable-datagrid/reorder-indicator-field'
 
 const CategoriesActions = () => (
   <TopToolbar>
@@ -32,7 +33,13 @@ export const CategoriesList = () => {
       <DraggableDatagrid bulkActionButtons={false} rowClick={false}>
         <LinkField href={(record) => `./${record.id}/subs`} element={(record) => record.name} label="Название" />
         <NumberField source="column_number" label="Колонка в меню" sortable={false} />
-        <ActionsField resource="categories" deleteConfirmProps={{ title: 'Удалить категорию' }} />
+        <ActionsField
+          resource="categories"
+          deleteConfirmProps={{ title: 'Удалить категорию' }}
+          source=""
+          textAlign="right"
+        />
+        <ReorderIndicatorField source="" textAlign="right" />
       </DraggableDatagrid>
     </ReorderList>
   )

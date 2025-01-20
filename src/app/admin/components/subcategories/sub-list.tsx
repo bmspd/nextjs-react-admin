@@ -7,10 +7,11 @@ import { ReorderingControls } from '../reordering-context/reordering-controls'
 import { ActionsField } from '../actions-field'
 import { ReorderList } from '../reorder-list'
 import { LinkField } from '../link-field'
+import { ReorderIndicatorField } from '../draggable-datagrid/reorder-indicator-field'
 
 const DynamicTitle = () => {
   const { meta } = useListContext()
-  return <span>{meta?.categoryName}</span>
+  return `${meta?.categoryName ?? ''} (подкатегории)`
 }
 
 const SubFilters = () => (
@@ -51,7 +52,13 @@ export const SubCategoriesList = () => {
       <DraggableDatagrid bulkActionButtons={false} isRowSelectable={() => false}>
         <TextField source="id" sortable={false} />
         <LinkField href={(record) => `./${record.id}/items`} element={(record) => record.name} label="Название" />
-        <ActionsField resource="subcategories" deleteConfirmProps={{ title: 'Удалить подкатегорию' }} />
+        <ActionsField
+          resource="subcategories"
+          deleteConfirmProps={{ title: 'Удалить подкатегорию' }}
+          source=""
+          textAlign="right"
+        />
+        <ReorderIndicatorField source="" textAlign="right" />
       </DraggableDatagrid>
     </ReorderList>
   )

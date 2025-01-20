@@ -1,4 +1,4 @@
-import { ConfirmProps, useRecordContext, WrapperField } from 'react-admin'
+import { ConfirmProps, FieldProps, useRecordContext, WrapperField } from 'react-admin'
 import EditIcon from '@mui/icons-material/Edit'
 import { IconButton } from '@mui/material'
 import { CustomDeleteButton } from './custom-delete-button'
@@ -10,7 +10,7 @@ export const ActionsField = ({
 }: {
   resource: string
   deleteConfirmProps: Partial<ConfirmProps>
-}) => {
+} & FieldProps) => {
   const record = useRecordContext()
   return (
     <WrapperField>

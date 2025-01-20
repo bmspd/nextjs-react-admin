@@ -7,6 +7,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox'
 import { ReorderingControls } from '../reordering-context/reordering-controls'
 import { ActionsField } from '../actions-field'
 import { ColorField } from './fields/color-field'
+import { ReorderIndicatorField } from '../draggable-datagrid/reorder-indicator-field'
 
 const ItemsBreadCrumbs = () => {
   const { categoryId, subId } = useParams<{ categoryId: string; subId: string }>()
@@ -52,7 +53,7 @@ export const ItemsList = () => {
   return (
     <ReorderList
       resource={`subcategories/${subId}/items`}
-      title={`Подкатегория #${subId}`}
+      title={`Подкатегория #${subId} (товары)`}
       filters={<ItemsFilters />}
       actions={<ItemsActions subId={subId} />}
       pagination={false}
@@ -62,7 +63,8 @@ export const ItemsList = () => {
         <TextField source="name" sortable={false} label="Название" />
         <TextField source="price" sortable={false} label="Цена" />
         <ColorField source="color" sortable={false} label="Цвет" />
-        <ActionsField resource="items" deleteConfirmProps={{ title: 'Удалить подкатегорию' }} />
+        <ActionsField resource="items" deleteConfirmProps={{ title: 'Удалить подкатегорию' }} source="" textAlign="right" />
+        <ReorderIndicatorField source="" textAlign="right" />
       </DraggableDatagrid>
     </ReorderList>
   )
