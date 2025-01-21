@@ -1,10 +1,10 @@
 import { auth } from './auth'
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 
-export async function middleware(request: NextRequest) {
+export default auth((request) => {
   //TODO: такая система кажется супер глупой, надо переделать
-  const session = await auth()
   const { pathname } = request.nextUrl
+  const session = request.auth
   if (pathname.startsWith('/admin')) {
     if (!session?.user) {
       const response = NextResponse.redirect(new URL('/login', request.url))
@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
     response.cookies.set('x-previous-path', '', { maxAge: -1 })
   }
   return response
-}
+})
 
 export const config = {
   // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher

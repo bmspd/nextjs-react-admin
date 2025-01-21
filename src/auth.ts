@@ -31,13 +31,6 @@ export const authConfig = {
       }
       return session
     },
-    async authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user
-      if (nextUrl.pathname.startsWith('/admin')) {
-        if (!isLoggedIn || auth?.user?.role !== 'admin') return false
-      }
-      return true
-    },
   },
   secret: process.env.NEXTAUTH_SECRET,
 } satisfies NextAuthConfig

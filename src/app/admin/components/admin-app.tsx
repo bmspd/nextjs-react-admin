@@ -60,6 +60,7 @@ const dataProvider = customizedProvider(jsonServerProvider('http://localhost:300
 const queryClient = new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false } } })
 const AdminApp = () => (
   <Admin
+    disableTelemetry
     queryClient={queryClient}
     dataProvider={dataProvider}
     layout={({ children }) => (

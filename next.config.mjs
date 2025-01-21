@@ -3,8 +3,21 @@ const nextConfig = {
   reactStrictMode: false,
   logging: {
     fetches: {
-      fullUrl: true
-    }
+      fullUrl: true,
+    },
+  },
+  async headers() {
+    return [
+      {
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET, POST, PUT, DELETE, OPTIONS' },
+          { key: 'Access-Control-Expose-Headers', value: 'X-Total-Count' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
+        ],
+      },
+    ]
   },
   webpack(config) {
     // Grab the existing rule that handles SVG imports
@@ -38,6 +51,6 @@ const nextConfig = {
 
     return config
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

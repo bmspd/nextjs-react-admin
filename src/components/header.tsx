@@ -3,6 +3,7 @@ import { LogIn, LogOut } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import { revalidateData } from './revalidate'
 export const Header = () => {
   const session = useSession()
   const router = useRouter()
@@ -14,8 +15,10 @@ export const Header = () => {
         <div
           className="flex gap-4 items-center cursor-pointer"
           onClick={() => {
-            signOut({ redirect: false })
-            router.push('/')
+            signOut({ redirect: false }).then(async () => {
+              await revalidateData('/')
+              router.push('/')
+            })
           }}
         >
           <div>

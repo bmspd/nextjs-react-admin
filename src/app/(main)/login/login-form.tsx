@@ -1,5 +1,6 @@
 'use client'
 
+import { revalidateData } from '@/components/revalidate'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { signIn } from 'next-auth/react'
@@ -24,9 +25,11 @@ export const LoginForm = ({ prevPath }: { prevPath?: string }) => {
       />
       <Button
         onClick={() => {
-          signIn('credentials', { ...values, redirect: false }).then(() => {
-            if (prevPath) router.push(prevPath)
-            else router.push('/')
+          signIn('credentials', { ...values, redirect: false }).then(async () => {
+            //TODO: это надо на что-то приличное переделать
+            await revalidateData('/')
+            await revalidateData('/login')
+            router.push(prevPath || '/')
           })
         }}
       >
