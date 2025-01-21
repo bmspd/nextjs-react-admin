@@ -56,7 +56,7 @@ const CustomMenu = () => {
   )
 }
 
-const dataProvider = customizedProvider(jsonServerProvider('http://localhost:3000/api/data'))
+const dataProvider = customizedProvider(jsonServerProvider(`/api/data`))
 const queryClient = new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false } } })
 const AdminApp = () => (
   <Admin
